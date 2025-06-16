@@ -6,24 +6,25 @@ class DocsScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Docs-like background
+      backgroundColor: Colors.grey[200], // Light grey background for the scaffold
       appBar: AppBar(
         title: const Text('Sales Agreement Document'),
-        backgroundColor: Colors.blueGrey[700],
+        backgroundColor: Colors.blueGrey[800], // Darker AppBar for a better contrast
       ),
       body: Column(
         children: [
-          // Placeholder for toolbar
+          // Toolbar with formatting options
           Container(
             color: Colors.white,
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Icon(Icons.format_bold),
+                Icon(Icons.format_bold, size: 24, color: Colors.blueGrey),
                 SizedBox(width: 8),
-                Icon(Icons.format_italic),
+                Icon(Icons.format_italic, size: 24, color: Colors.blueGrey),
                 SizedBox(width: 8),
-                Icon(Icons.format_underlined),
+                Icon(Icons.format_underlined, size: 24, color: Colors.blueGrey),
                 // Add more formatting icons as needed
               ],
             ),
@@ -33,7 +34,8 @@ class DocsScaffold extends StatelessWidget {
           Expanded(
             child: Center(
               child: Container(
-                width: 800,
+                width: double.infinity, // Makes the container responsive
+                constraints: BoxConstraints(maxWidth: 800), // Maximum width for larger screens
                 padding: const EdgeInsets.all(24.0),
                 margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
@@ -50,7 +52,7 @@ class DocsScaffold extends StatelessWidget {
                 child: const SingleChildScrollView(
                   child: Text(
                     'Type your sales agreement here...',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
                 ),
               ),

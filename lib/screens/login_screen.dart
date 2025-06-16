@@ -5,145 +5,125 @@ import 'package:legallyai/screens/main_screen.dart';
 import 'package:legallyai/screens/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var keyForm = GlobalKey<FormState>();
-
-  var emailCtrl = TextEditingController();
-
-  var passwordCtrl = TextEditingController();
+  final keyForm = GlobalKey<FormState>();
+  final emailCtrl = TextEditingController();
+  final passwordCtrl = TextEditingController();
   bool hidePassword = true;
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: true, 
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
+      backgroundColor: Colors.grey[100],
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Form(
             key: keyForm,
-            child: Padding(
-              padding: EdgeInsets.only(left: 30, right: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: 105,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'))      
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 90,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const Gap(32),
+                Text(
+                  "Welcome back to LegallyAI!",
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(8),
+                Text(
+                  "Please login with your credentials",
+                  style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(32),
+                Column(
+                  children: [
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: setTextDecoration('Email'),
+                      controller: emailCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "*Email is required.";
+                        }
+                        if (!EmailValidator.validate(value)) {
+                          return "*Invalid email address.";
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const Gap(25),
-                  Text("Welcome back to LEGALLY AI!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 32
+                    const Gap(16),
+                    TextFormField(
+                      obscureText: hidePassword,
+                      decoration: setTextDecoration('Password', isPasswordField: true),
+                      controller: passwordCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "*Password is required.";
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const Gap(17),
-                  Text("Please login to your credentials",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16
-                    ),
-                  ),
-                  const Gap(17),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: setTextDecoration('Email'),
-                    controller: emailCtrl,
-                    validator: (value) {
-                      if(value == null || value.isEmpty){
-                            return "*Email is required.";
-                          }
-                          if(!EmailValidator.validate(value)){
-                            return "*Invalid email address.";
-                          }
-                    },
-                  ),
-                  const Gap(15),
-                  TextFormField(
-                    obscureText: hidePassword,
-                    decoration: setTextDecoration('Password', isPasswordFieldTrue: true),
-                    controller: passwordCtrl,
-                    validator: (value) {
-                      if(value == null || value.isEmpty){
-                            return "*Password is required.";
-                          }
-                    },
-                  ),
-                  const Gap(40),
-                   Container(
-                      width: 380,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xFF6B6399), Color(0xFFB2A5FF)],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
+                    const Gap(32),
+                    SizedBox(
+                      width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          if(!keyForm.currentState!.validate()){
-                            return;
-                          }
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+                          if (!keyForm.currentState!.validate()) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainScreen()),
+                          );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
+                        child: const Text("Login"),
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account?",
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => RegisterScreen()),
+                        );
+                      },
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: theme.primaryColor,
                         ),
                       ),
                     ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Don't have an account?",
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            
-                          ),
-                      ),
-                      TextButton(onPressed: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> RegisterScreen()));
-                      }, child: Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF493D9E)
-                        ),
-                      ))
-                    ],
-                  )
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -151,33 +131,38 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  setTextDecoration(String label, {isPasswordFieldTrue = false}) {
+  InputDecoration setTextDecoration(String label, {bool isPasswordField = false}) {
     return InputDecoration(
-        enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: Color(0xFFF4F4F6), // Border color when not focused
-          width: 1,
-        ),
-      ) ,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: Colors.grey, // Border color when focused
-          width: 2,
-        ),
-      ),
-      label: Text(label),
+      hintText: label,
+      hintStyle: const TextStyle(color: Colors.black54),
       filled: true,
-      fillColor: Color(0xFFF4F4F6),
-      suffixIcon: isPasswordFieldTrue ? IconButton(
-        onPressed: toogleShowPassword,
-        icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility)) : null,
-        
-      );
+      fillColor: Colors.grey[100],
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+      ),
+      suffixIcon: isPasswordField
+          ? IconButton(
+              onPressed: toggleShowPassword,
+              icon: Icon(
+                hidePassword ? Icons.visibility_off : Icons.visibility,
+                color: Colors.grey[600],
+              ),
+            )
+          : null,
+    );
   }
 
-  void toogleShowPassword() {
+  void toggleShowPassword() {
     setState(() {
       hidePassword = !hidePassword;
     });
